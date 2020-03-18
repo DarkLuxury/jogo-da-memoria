@@ -32,8 +32,8 @@ main {
 
 .carta {
     background-color: white;
-    height: 100px;
-    width: 100px;
+    height: 160px;
+    width: 140px;
     margin: 6%;
     cursor: pointer;
     background-size: contain;

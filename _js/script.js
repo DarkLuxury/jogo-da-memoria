@@ -4,7 +4,7 @@ let imagens = imagensSalvas.concat(imagensSalvas)
 
 setTimeout(function(){ // Voltar a primeira imagem em um tempo determinado
     for(let carta of cartas){
-        carta.style.backgroundImage = 'url("./_images/1.png")'
+        carta.style.backgroundImage = 'url("./_images/0.png")'
     }
 }, 4000)
 
@@ -61,13 +61,33 @@ carta13.addEventListener("click", mudaCarta)
 carta14.addEventListener("click", mudaCarta)
 carta15.addEventListener("click", mudaCarta)
 
+let cartaVirada = false
+let comparaIf = ''
+let comparaElse = ''
+let idAcessivelIf = ''
+let idAcessivelElse = ''
+
 function mudaCarta() {
-    id = this.id
-    let imagem = imagens[id]
+    var id = this.id
+    var imagem = imagens[id]
     cartaAtual = document.getElementById(`${id}`)
-    console.log(cartaAtual)
     cartaAtual.style.backgroundImage = `url("./_images/${imagem}")`
+    if (cartaVirada == true) {
+        cartaVirada = false
+        comparaIf = imagem
+        idAcessivelIf = id
+        if (comparaIf != comparaElse){
+            var cartaIdAcessivelIf = document.getElementById(`${idAcessivelIf}`)
+            var cartaIdAcessivelElse = document.getElementById(`${idAcessivelElse}`)
+            setTimeout(() => {
+                cartaIdAcessivelIf.style.backgroundImage = 'url("./_images/0.png")'
+                cartaIdAcessivelElse.style.backgroundImage = 'url("./_images/0.png")'
+            }, 1000);
+            
+        }
+    } else {
+        cartaVirada = true
+        comparaElse = imagem
+        idAcessivelElse = id
+    }
 }
-
-
-
