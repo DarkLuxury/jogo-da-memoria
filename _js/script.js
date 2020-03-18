@@ -1,93 +1,84 @@
-let cartas = document.querySelectorAll(".carta")
-let imagensSalvas = ["1.png", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg"]
-let imagens = imagensSalvas.concat(imagensSalvas)
-
-setTimeout(function(){ // Voltar a primeira imagem em um tempo determinado
-    for(let carta of cartas){
-        carta.style.backgroundImage = 'url("./_images/0.png")'
-    }
-}, 4000)
-
-
-function embaralhar(lista) { // função para embaralhar as imagens
-    let valor_temporario;
-    let indice_aleatorio;
-  
-    for (let i = lista.length -1; i !== 0; i--) {
-        indice_aleatorio = Math.floor(Math.random() * i);
-  
-        valor_temporario = lista[i];
-        lista[i] = lista[indice_aleatorio];
-        lista[indice_aleatorio] = valor_temporario;
-    }
-    return lista;
-  }
-imagens = embaralhar(imagens) // Chamada da função ao iniciar
-  
-for(let i = 0; i < cartas.length; i++){
-    cartas[i].style.backgroundImage = `url("./_images/${imagens[i]}")` // Posicionar as imagens
+function createCardDiv(id) {
+    const root = document.getElementById('root');
+    const div = document.createElement('div');
+    div.setAttribute('id', id);
+    div.setAttribute('class', 'carta');
+    div.addEventListener('click', changeCard);
+    root.appendChild(div);
 }
 
-let carta0 = document.getElementById(0)
-let carta1 = document.getElementById(1)
-let carta2 = document.getElementById(2)
-let carta3 = document.getElementById(3)
-let carta4 = document.getElementById(4)
-let carta5 = document.getElementById(5)
-let carta6 = document.getElementById(6)
-let carta7 = document.getElementById(7)
-let carta8 = document.getElementById(8)
-let carta9 = document.getElementById(9)
-let carta10 = document.getElementById(10)
-let carta11 = document.getElementById(11)
-let carta12 = document.getElementById(12)
-let carta13 = document.getElementById(13)
-let carta14 = document.getElementById(14)
-let carta15 = document.getElementById(15)
-carta0.addEventListener("click", mudaCarta)
-carta1.addEventListener("click", mudaCarta)
-carta2.addEventListener("click", mudaCarta)
-carta3.addEventListener("click", mudaCarta)
-carta4.addEventListener("click", mudaCarta)
-carta5.addEventListener("click", mudaCarta)
-carta6.addEventListener("click", mudaCarta)
-carta7.addEventListener("click", mudaCarta)
-carta8.addEventListener("click", mudaCarta)
-carta9.addEventListener("click", mudaCarta)
-carta10.addEventListener("click", mudaCarta)
-carta11.addEventListener("click", mudaCarta)
-carta12.addEventListener("click", mudaCarta)
-carta13.addEventListener("click", mudaCarta)
-carta14.addEventListener("click", mudaCarta)
-carta15.addEventListener("click", mudaCarta)
-
-let cartaVirada = false
-let comparaIf = ''
-let comparaElse = ''
-let idAcessivelIf = ''
-let idAcessivelElse = ''
-
-function mudaCarta() {
-    var id = this.id
-    var imagem = imagens[id]
-    cartaAtual = document.getElementById(`${id}`)
-    cartaAtual.style.backgroundImage = `url("./_images/${imagem}")`
-    if (cartaVirada == true) {
-        cartaVirada = false
-        comparaIf = imagem
-        idAcessivelIf = id
-        if (comparaIf != comparaElse){
-            var cartaIdAcessivelIf = document.getElementById(`${idAcessivelIf}`)
-            var cartaIdAcessivelElse = document.getElementById(`${idAcessivelElse}`)
-            setTimeout(() => {
-                cartaIdAcessivelIf.style.backgroundImage = 'url("./_images/0.png")'
-                cartaIdAcessivelElse.style.backgroundImage = 'url("./_images/0.png")'
-            }, 1000);
-            
-        }
-    } else {
-        cartaVirada = true
-        comparaElse = imagem
-        idAcessivelElse = id
+function createCards(max) {
+    for(var i = 0; i < max; i++) {
+        createCardDiv(i);
     }
+}
+
+createCards(16);
+
+let cards = document.querySelectorAll(".carta")
+let imageNames = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg", "6.jpg", "7.jpg", "8.jpg"]
+let images = [...imageNames, ...imageNames]
+
+let backgroundCard = 'url("./_images/0.jpg")';
+
+const changeBackground = card => card.style.backgroundImage = backgroundCard;
+setTimeout(() => cards.forEach(changeBackground), 4000);
+
+function randomize(list) { // função para embaralhar as imagens
+    let temp;
+    let randomIndex;
+  
+    for (let i = list.length -1; i !== 0; i--) {
+        randomIndex = Math.floor(Math.random() * i);
+        temp = list[i];
+        list[i] = list[randomIndex];
+        list[randomIndex] = temp;
+    }
+    return list;
+}
+
+images = randomize(images) // Chamada da função ao iniciar
+  
+for(let i = 0; i < cards.length; i++){
+    cards[i].style.backgroundImage = `url("./_images/${images[i]}")` // Posicionar as imagens
+}
+
+let selectedCard = false
+let firstSelectedCard = ''
+let secondSelectedCard = ''
+let firstId = ''
+let secondId = ''
+
+function changeImageCard(id, image) {
+    const cardDiv = document.getElementById(id)
+    cardDiv.style.backgroundImage = `url("./_images/${image}")`;
+}
+
+function changeBackgroundCards(_firstId, _secondId) {
+    setTimeout(() => {
+        var firstCard = document.getElementById(_firstId)
+        var secondCard = document.getElementById(_secondId)
+        changeBackground(firstCard);
+        changeBackground(secondCard);
+    }, 1000);
+}
+
+function changeCard() {
+    const { id } = this;
+    const image = images[id]
+    changeImageCard(id, image);
+
+    if (selectedCard) {
+        selectedCard = !selectedCard;
+        firstSelectedCard = image;
+        firstId = id;
+        if (firstSelectedCard != secondSelectedCard){
+            changeBackgroundCards(firstId, secondId);
+        }
+        return;
+    } 
+      
+    selectedCard = !selectedCard;
+    secondSelectedCard = image
+    secondId = id
 }
